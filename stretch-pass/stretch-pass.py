@@ -2,10 +2,33 @@
 import argparse
 import log
 import consts
+import sys
 from config import Config
+from password_deriver import PasswordDeriver
+from getpass import getpass
 
 
 VERSION = '0.0.0'
+
+
+def get_passphrase(args):
+    if args.passphrase is not None:
+        return args.passphrase
+
+    if args.stdin_passphrase:
+        return sys.stdin.read()
+
+    while True:
+        passphrase = getpass('Enter passphrase: ')
+
+        if args.confirm_passphrase:
+            conf_passphrase = getpass('Confirm passphrase: ')
+
+            if passphrase != conf_passphrase:
+                log.msg('Passphrases do not match\n')
+                continue
+
+        return passphrase
 
 
 def main():
@@ -31,6 +54,11 @@ def main():
 
     parser.add_argument('-u', '--username', dest='username', help='Username/program name (case sensitive - used to generate the password)')
 
+    password_input_group = parser.add_mutually_exclusive_group()
+    password_input_group.add_argument('--passphrase', dest='passphrase', help='Pass passphrase directly instead of via prompt')
+    password_input_group.add_argument('--stdin-passphrase', dest='stdin_passphrase', action='store_true', help='Read passphrase from STDIN (be aware of newline characters and environment encodings)')
+    password_input_group.add_argument('-c', '--confirm', dest='confirm_passphrase', action='store_true', help='Prompt for the passphrase twice and verify they are the same')
+
     args = parser.parse_args()
 
     if args.version:
@@ -45,6 +73,19 @@ def main():
         log.log_strm = open(args.log_file, 'w')
 
     config = Config.load(args)
+
+    passDer = PasswordDeriver(config)
+
+    sys.stdout.write(passDer.compute_password(args.username, get_passphrase(args)))
+
+    if sys.stdout.isatty():
+        sys.stdout.write('\n')
+
+    sys.stdout.flush()
+    sys.stdout.close()
+
+    log.log_strm.flush()
+    log.log_strm.close()
 
 if __name__ == '__main__':
     main()
