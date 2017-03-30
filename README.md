@@ -22,18 +22,18 @@ Usage
 
 ```
 $ stretch-pass -h
-usage: stretch-pass [-h] [-v] [-V] [--log-file LOG_FILE] [-C CONFIG_PATH]
-                    [-t TIME_COST] [-m MEMORY_COST] [-p PARALLELISM]
-                    [-l PASSWORD_LENGTH] [-s SALT] [-u USERNAME]
-                    [--passphrase PASSPHRASE | --stdin-passphrase | -c]
+usage: stretch-pass [-h] [-v] [-V] [--log-file LOG_FILE]
+                    [--config CONFIG_PATH] [-t TIME_COST] [-m MEMORY_COST]
+                    [-p PARALLELISM] [-l PASSWORD_LENGTH] [-s SALT]
+                    [-u USERNAME] [-c]
+                    [--passphrase PASSPHRASE | --stdin-passphrase | -C]
 
 optional arguments:
   -h, --help            show this help message and exit
   -v, --verbose
   -V, --version         Show version and exit
   --log-file LOG_FILE   Path to log file (use with --verbose)
-  -C CONFIG_PATH, --config CONFIG_PATH
-                        Path to config file (defaults to ~/.stretchpassrc)
+  --config CONFIG_PATH  Path to config file (defaults to ~/.stretchpassrc)
   -t TIME_COST, --time-cost TIME_COST
   -m MEMORY_COST, --memory-cost MEMORY_COST
   -p PARALLELISM, --parallelism PARALLELISM
@@ -42,10 +42,11 @@ optional arguments:
   -u USERNAME, --username USERNAME
                         Username/program name (case sensitive - used to
                         generate the password)
+  -c, --clip            Copy the password to clipboard instead of STDOUT
   --passphrase PASSPHRASE
                         Pass passphrase directly instead of via prompt
   --stdin-passphrase    Read passphrase from STDIN (be aware of newline
                         characters and environment encodings)
-  -c, --confirm         Prompt for the passphrase twice and verify they are
+  -C, --confirm         Prompt for the passphrase twice and verify they are
                         the same
 ```
