@@ -3,6 +3,7 @@ import argparse
 import log
 import consts
 import sys
+import pyperclip
 from config import Config
 from password_deriver import PasswordDeriver
 from getpass import getpass
@@ -39,7 +40,6 @@ def main():
     parser.add_argument('--log-file', type=str, dest='log_file', help='Path to log file (use with --verbose)')
 
     parser.add_argument(
-        '-C',
         '--config',
         dest='config_path',
         help='Path to config file (defaults to {})'.format(consts.DEFAULT_CONFIG_FILE),
@@ -53,6 +53,8 @@ def main():
     parser.add_argument('-s', '--salt', dest='SALT', help='The hex string to use as a salt (at least 8 bytes)')
 
     parser.add_argument('-u', '--username', dest='username', help='Username/program name (case sensitive - used to generate the password)')
+
+    parser.add_argument('-C', '--clip', dest='copy_to_clipboard', action='store_true', help='Copy the password to clipboard instead of STDOUT')
 
     password_input_group = parser.add_mutually_exclusive_group()
     password_input_group.add_argument('--passphrase', dest='passphrase', help='Pass passphrase directly instead of via prompt')
@@ -76,10 +78,15 @@ def main():
 
     passDer = PasswordDeriver(config)
 
-    sys.stdout.write(passDer.compute_password(args.username, get_passphrase(args)))
+    password = passDer.compute_password(args.username, get_passphrase(args))
 
-    if sys.stdout.isatty():
-        sys.stdout.write('\n')
+    if args.copy_to_clipboard:
+        pyperclip.copy(password)
+        log.msg('Password copied to clipboard')
+    else:
+        sys.stdout.write(password)
+        if sys.stdout.isatty():
+            sys.stdout.write('\n')
 
     sys.stdout.flush()
     sys.stdout.close()
