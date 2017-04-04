@@ -10,8 +10,8 @@ class Config:
         self.path = path
 
         self.time_cost = self.parse_option(opts, args, 'TIME_COST', consts.DEFAULT_TIME_COST, int, lambda val: 0 < val and val <= 2**16)
-        self.memory_cost = self.parse_option(opts, args, 'MEMORY_COST', consts.DEFAULT_MEMORY_COST, int, lambda val: 0 < val and val <= 2**32)
         self.parallelism = self.parse_option(opts, args, 'PARALLELISM', consts.DEFAULT_PARALLELISM, int, lambda val: 0 < val and val <= 64)
+        self.memory_cost = self.parse_option(opts, args, 'MEMORY_COST', consts.DEFAULT_MEMORY_COST, int, lambda val: 8 * self.parallelism <= val and val <= 2**32)
         self.password_length = self.parse_option(opts, args, 'PASSWORD_LENGTH', consts.DEFAULT_PASSWORD_LENGTH, int, lambda val: 0 < val and val <= 2**16)
         self.salt = self.parse_option(opts, args, 'SALT', None, bytes.fromhex, lambda val: len(val) >= 8, 'SALT must be at least 8 bytes')
 
