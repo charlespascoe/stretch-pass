@@ -9,7 +9,7 @@ from password_deriver import PasswordDeriver
 from getpass import getpass
 
 
-VERSION = '0.0.0'
+VERSION = '0.1.1'
 
 
 def get_passphrase(args):
