@@ -95,4 +95,7 @@ def main():
     log.log_strm.close()
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print('Keyboard interrupt')
