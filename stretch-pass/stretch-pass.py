@@ -53,6 +53,8 @@ def main():
     if editor is not None:
         parser.add_argument('-e', '--edit-config', dest='edit_config', action='store_true', help='Opens the stretch-pass config using {}'.format(editor))
 
+    parser.add_argument('--kdf-params', dest='show_parameters', action='store_true', help='Print KDF parameters and exit')
+
     parser.add_argument('-t', '--time-cost', dest='TIME_COST')
     parser.add_argument('-m', '--memory-cost', dest='MEMORY_COST')
     parser.add_argument('-p', '--parallelism', dest='PARALLELISM')
@@ -93,6 +95,11 @@ def main():
         sys.exit(0)
 
     config = Config.load(args)
+
+    if args.show_parameters:
+        log.msg('KDF Parameters:')
+        log.msg(config.params())
+        sys.exit(0)
 
     passDer = PasswordDeriver(config)
 
