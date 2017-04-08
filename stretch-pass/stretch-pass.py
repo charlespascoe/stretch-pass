@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
+# PYTHON_ARGCOMPLETE_OK
 import argparse
 import log
 import consts
 import sys
 import pyperclip
+import os
 from config import Config
 from password_deriver import PasswordDeriver
 from getpass import getpass
 
 
-VERSION = '0.1.1'
+VERSION = '0.1.2'
 
 
 def get_passphrase(args):
@@ -46,6 +48,13 @@ def main():
         default=consts.DEFAULT_CONFIG_FILE
     )
 
+    editor = os.getenv('EDITOR')
+
+    if editor is not None:
+        parser.add_argument('-e', '--edit-config', dest='edit_config', action='store_true', help='Opens the stretch-pass config using {}'.format(editor))
+
+    parser.add_argument('--kdf-params', dest='show_parameters', action='store_true', help='Print KDF parameters and exit')
+
     parser.add_argument('-t', '--time-cost', dest='TIME_COST')
     parser.add_argument('-m', '--memory-cost', dest='MEMORY_COST')
     parser.add_argument('-p', '--parallelism', dest='PARALLELISM')
@@ -61,6 +70,12 @@ def main():
     password_input_group.add_argument('--stdin-passphrase', dest='stdin_passphrase', action='store_true', help='Read passphrase from STDIN (be aware of newline characters and environment encodings)')
     password_input_group.add_argument('-C', '--confirm', dest='confirm_passphrase', action='store_true', help='Prompt for the passphrase twice and verify they are the same')
 
+    try:
+        import argcomplete
+        argcomplete.autocomplete(parser)
+    except Exception:
+        pass # Optional argcomplete module not installed
+
     args = parser.parse_args()
 
     if args.version:
@@ -74,7 +89,17 @@ def main():
         log.msg('Writing logs to: {}'.format(args.log_file))
         log.log_strm = open(args.log_file, 'w')
 
+    if args.edit_config:
+        log.msg('Opening config file "{}" using {}'.format(args.config_path, editor))
+        os.system('{} "{}"'.format(editor, os.path.abspath(os.path.expanduser(args.config_path))))
+        sys.exit(0)
+
     config = Config.load(args)
+
+    if args.show_parameters:
+        log.msg('KDF Parameters:')
+        log.msg(config.params())
+        sys.exit(0)
 
     passDer = PasswordDeriver(config)
 
@@ -95,4 +120,7 @@ def main():
     log.log_strm.close()
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print('Keyboard interrupt')

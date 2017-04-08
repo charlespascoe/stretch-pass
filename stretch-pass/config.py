@@ -3,6 +3,7 @@ import log
 import re
 import os
 import sys
+import stat
 
 
 class Config:
@@ -95,6 +96,7 @@ class Config:
     def create_default(path):
         with open(path, 'w') as f:
             f.write('SALT=' + Config.new_salt().hex())
+        os.chmod(path, stat.S_IRUSR | stat.S_IWUSR)
 
     @staticmethod
     def new_salt():
@@ -103,11 +105,16 @@ class Config:
         log.debug('Config', 'Generated new salt: {}'.format(log.format_bytes(salt)))
         return salt
 
-    def __str__(self):
+    def params(self):
         return (
             '    time_cost:       {}\n'.format(self.time_cost) +
             '    memory_cost:     {}\n'.format(self.memory_cost) +
             '    parallelism:     {}\n'.format(self.parallelism) +
-            '    password_length: {}\n'.format(self.password_length) +
+            '    password_length: {}'.format(self.password_length)
+        )
+
+    def __str__(self):
+        return (
+            self.params() + '\n' +
             '    salt:            {}'.format('<None>' if self.salt is None else log.format_bytes(self.salt))
         )
