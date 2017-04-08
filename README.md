@@ -52,6 +52,8 @@ PASSWORD_LENGTH = 64
 SALT = 00112233445566778899aabbccddeeff
 ```
 
+**N.B: Changing any of these parameters will result in a different password to be generated from the same passphrase! Configure these parameters *before* using the generated passwords, and backup the configuration file somewhere safe.**
+
 Autocomplete
 ------------
 
