@@ -11,7 +11,7 @@ from password_deriver import PasswordDeriver
 from getpass import getpass
 
 
-VERSION = '0.1.1'
+VERSION = '0.1.2'
 
 
 def get_passphrase(args):
