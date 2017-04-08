@@ -3,6 +3,7 @@ import log
 import re
 import os
 import sys
+import stat
 
 
 class Config:
@@ -95,6 +96,7 @@ class Config:
     def create_default(path):
         with open(path, 'w') as f:
             f.write('SALT=' + Config.new_salt().hex())
+        os.chmod(path, stat.S_IRUSR | stat.S_IWUSR)
 
     @staticmethod
     def new_salt():
