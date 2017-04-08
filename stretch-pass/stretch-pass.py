@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# PYTHON_ARGCOMPLETE_OK
 import argparse
 import log
 import consts
@@ -66,6 +67,12 @@ def main():
     password_input_group.add_argument('--passphrase', dest='passphrase', help='Pass passphrase directly instead of via prompt')
     password_input_group.add_argument('--stdin-passphrase', dest='stdin_passphrase', action='store_true', help='Read passphrase from STDIN (be aware of newline characters and environment encodings)')
     password_input_group.add_argument('-C', '--confirm', dest='confirm_passphrase', action='store_true', help='Prompt for the passphrase twice and verify they are the same')
+
+    try:
+        import argcomplete
+        argcomplete.autocomplete(parser)
+    except Exception:
+        pass # Optional argcomplete module not installed
 
     args = parser.parse_args()
 
