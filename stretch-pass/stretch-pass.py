@@ -4,6 +4,7 @@ import log
 import consts
 import sys
 import pyperclip
+import os
 from config import Config
 from password_deriver import PasswordDeriver
 from getpass import getpass
@@ -46,6 +47,11 @@ def main():
         default=consts.DEFAULT_CONFIG_FILE
     )
 
+    editor = os.getenv('EDITOR')
+
+    if editor is not None:
+        parser.add_argument('-e', '--edit-config', dest='edit_config', action='store_true', help='Opens the stretch-pass config using {}'.format(editor))
+
     parser.add_argument('-t', '--time-cost', dest='TIME_COST')
     parser.add_argument('-m', '--memory-cost', dest='MEMORY_COST')
     parser.add_argument('-p', '--parallelism', dest='PARALLELISM')
@@ -73,6 +79,11 @@ def main():
     if args.log_file is not None:
         log.msg('Writing logs to: {}'.format(args.log_file))
         log.log_strm = open(args.log_file, 'w')
+
+    if args.edit_config:
+        log.msg('Opening config file "{}" using {}'.format(args.config_path, editor))
+        os.system('{} "{}"'.format(editor, os.path.abspath(os.path.expanduser(args.config_path))))
+        sys.exit(0)
 
     config = Config.load(args)
 
