@@ -6,6 +6,7 @@ setup(
   description = 'Derive high-entropy passwords from passphrases using a slow key derivation function (a.k.a. key stretching)',
   author = 'Charles Pascoe',
   url='https://github.com/cpascoe95/stretch-pass',
+  download_url='https://github.com/cpascoe95/stretch-pass/archive/v0.1.3.tar.gz'
   author_email = 'charles@cpascoe.co.uk',
   keywords = ['password', 'passpharse', 'kdf', 'hash', 'stretch', 'stretching'],
   classifiers = [],
