@@ -1,5 +1,5 @@
-import consts
-import log
+from stretch_pass import consts
+from stretch_pass import log
 import re
 import os
 import sys
