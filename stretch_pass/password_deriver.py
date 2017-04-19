@@ -1,6 +1,6 @@
 import argon2
 import base64
-import log
+from stretch_pass import log
 
 class PasswordDeriver:
     def __init__(self, config):
