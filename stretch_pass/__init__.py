@@ -11,7 +11,7 @@ from stretch_pass.password_deriver import PasswordDeriver
 from getpass import getpass
 
 
-VERSION = '0.1.2'
+VERSION = '0.1.3'
 
 
 def get_passphrase(args):
