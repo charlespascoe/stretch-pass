@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 # PYTHON_ARGCOMPLETE_OK
 import argparse
-import log
-import consts
+from stretch_pass import log
+from stretch_pass import consts
 import sys
 import pyperclip
 import os
-from config import Config
-from password_deriver import PasswordDeriver
+from stretch_pass.config import Config
+from stretch_pass.password_deriver import PasswordDeriver
 from getpass import getpass
 
 
-VERSION = '0.1.2'
+VERSION = '0.1.3'
 
 
 def get_passphrase(args):
@@ -34,7 +34,7 @@ def get_passphrase(args):
         return passphrase
 
 
-def main():
+def stretch_pass():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-v', '--verbose', action='count', default=0, dest='verbosity')
@@ -119,8 +119,8 @@ def main():
     log.log_strm.flush()
     log.log_strm.close()
 
-if __name__ == '__main__':
+def main():
     try:
-        main()
+        stretch_pass()
     except KeyboardInterrupt:
         print('Keyboard interrupt')
