@@ -15,7 +15,9 @@ Many programs that use passwords for securing sensitive information do not have 
 Setup
 =====
 
-`$ pip3 install -r requirements.txt`
+Requires Python 3.5+
+
+`$ pip3 install stretch-pass`
 
 Usage
 =====
